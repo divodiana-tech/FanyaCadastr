@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🐸Кваня🏠</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: pointer;
+            user-select: none;
+            background: radial-gradient(ellipse at 30% 20%, #1a0533 0%, #0d001a 40%, #050010 100%);
+            font-family: 'Segoe UI Emoji', 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        .stars-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: white;
+            animation: twinkle var(--twinkle-dur) ease-in-out infinite;
+            animation-delay: var(--twinkle-delay);
+        }
+
+        .bg-emoji {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.15;
+            animation: floatAround var(--float-dur) ease-in-out infinite;
+            animation-delay: var(--float-delay);
+            pointer-events: none;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 3rem 1rem;
+        }
+
+        .frog-top {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            animation: bounce3d 2s ease-in-out infinite, frogDance 0.5s ease-in-out infinite;
+        }
+
+        .title-card {
+            position: relative;
+            padding: 2rem 2rem;
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 60px rgba(128, 0, 255, 0.15), 0 0 120px rgba(128, 0, 255, 0.05);
+            animation: breathe 4s ease-in-out infinite;
+        }
+
+        @media (min-width: 768px) {
+            .title-card {
+                padding: 2.5rem 3.5rem;
+            }
+        }
+
+        .title-text {
+            text-align: center;
+            font-weight: 900;
+            line-height: 1.2;
+            font-size: clamp(1.4rem, 5vw, 3.2rem);
+            background: linear-gradient(135deg, #ff6bff, #ffaa40, #ffee58, #69f0ae, #40c4ff, #ff6bff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease-in-out infinite;
+            letter-spacing: -0.02em;
+        }
+
+        .white-card {
+            position: relative;
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem 1.5rem;
+            max-width: 28rem;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(128, 0, 255, 0.1);
+            animation: floatUp 3s ease-in-out infinite;
+        }
+
+        @media (min-width: 768px) {
+            .white-card {
+                padding: 1.75rem 2.5rem;
+            }
+        }
+
+        .white-card p:first-child {
+            color: #1f2937;
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .white-card p:first-child {
+                font-size: 1.25rem;
+            }
+        }
+
+        .white-card p:nth-child(2) {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        @media (min-width: 768px) {
+            .white-card p:nth-child(2) {
+                font-size: 1rem;
+            }
+        }
+
+        .white-card p:nth-child(3) {
+            color: #9ca3af;
+            font-size: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .click-counter {
+            margin-top: 1.5rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+            text-align: center;
+            white-space: pre-line;
+        }
+
+        .frog-quote {
+            position: fixed;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            z-index: 100;
+            background: #4ade80;
+            color: #14532d;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            animation: popIn 0.3s ease-out forwards;
+            pointer-events: none;
+        }
+
+        .frog-quote.fade-out {
+            animation: fadeOut 0.5s ease-in forwards;
+        }
+
+        .bottom-decoration {
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .bottom-emojis {
+            font-size: 1.875rem;
+            animation: wiggle 1s ease-in-out infinite;
+        }
+
+        @media (min-width: 768px) {
+            .bottom-emojis {
+                font-size: 3rem;
+            }
+        }
+
+        .bottom-credit {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .flying-emojis-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 40;
+            overflow: hidden;
+        }
+
+        .flying-emoji {
+            position: absolute;
+            font-size: 2rem;
+            will-change: transform, opacity;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1) perspective(800px) rotateX(0deg); }
+            50% { transform: scale(1.04) perspective(800px) rotateX(1deg); }
+        }
+
+        @keyframes bounce3d {
+            0%, 100% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.2) translateY(-15px); }
+        }
+
+        @keyframes frogDance {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes floatUp {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes floatAround {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -15px) rotate(10deg); }
+            50% { transform: translate(-10px, -25px) rotate(-5deg); }
+            75% { transform: translate(-20px, -10px) rotate(8deg); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-1deg); }
+            25% { transform: rotate(1deg); }
+            50% { transform: rotate(-1.5deg); }
+            75% { transform: rotate(1.5deg); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes popIn {
+            0% { transform: translate(-50%, 0) scale(0); opacity: 0; }
+            70% { transform: translate(-50%, 0) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -20px) scale(0.8); }
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        const MAX_EMOJIS = 80;
+        const EMOJIS_PER_CLICK_MIN = 8;
+        const EMOJIS_PER_CLICK_MAX = 14;
+        const QUOTE_DISPLAY_MS = 2500;
+        const QUOTE_FADEOUT_MS = 500;
+
+        const EMOJI_LIST = [
+            "🏠", "🏡", "🏢", "🏗️", "🏘️", "🏰", "🏛️", "🗺️",
+            "🌳", "🌲", "🌴", "🌿", "🍀", "🌱",
+            "🐸", "🐸", "🐸", "🐸",
+            "📐", "📏", "🧭", "🗾", "🌍",
+            "🏗️", "🔭", "📍", "🛖", "⛺",
+        ];
+
+        const FROG_QUOTES = [
+            "ква-ква 🐸",
+            "межевание — это кваааайно",
+            "лягушка одобряет вашу карту",
+            "кваааа-дратные метры",
+            "земле-КВАК-стройство",
+            "🐸 ква 🐸 ква 🐸",
+            "кадастр — квадастр",
+        ];
+
+        const BG_EMOJIS_DATA = ["🐸", "🏠", "🌍", "📐", "🌳", "🗺️", "🏢", "🐸"];
+
+        let flyingEmojis = [];
+        let nextEmojiId = 0;
+        let clickCount = 0;
+        let animFrameId = 0;
+        let quoteVisible = false;
+        let quoteTimeout = null;
+        let quoteFadeTimeout = null;
+        let lastQuoteIndex = -1;
+
+        const app = document.getElementById('app');
+
+        const starsHtml = Array.from({ length: 40 }, () => {
+            const size = 1 + Math.random() * 2;
+            return `<div class="star" style="
+                width:${size}px;height:${size}px;
+                left:${Math.random() * 100}%;top:${Math.random() * 100}%;
+                opacity:${0.2 + Math.random() * 0.5};
+                --twinkle-dur:${2 + Math.random() * 4}s;
+                --twinkle-delay:${Math.random() * 5}s;
+            "></div>`;
+        }).join('');
+
+        const bgEmojisHtml = BG_EMOJIS_DATA.map((em, i) => `
+            <div class="bg-emoji" style="
+                left:${10 + (i * 12) % 80}%;
+                top:${15 + ((i * 17) % 60)}%;
+                --float-dur:${8 + i * 2}s;
+                --float-delay:${i * 0.7}s;
+            ">${em}</div>
+        `).join('');
+
+        app.innerHTML = `
+            <div class="stars-container">${starsHtml}</div>
+            <div class="stars-container">${bgEmojisHtml}</div>
+            <div class="main-content">
+                <div class="frog-top">🐸</div>
+                <div class="title-card">
+                    <h1 class="title-text">
+                        С ДНЁМ РАБОТНИКОВ<br>
+                        ЗЕМЛЕУСТРОИТЕЛЬНОЙ<br>
+                        И КАРТОГРАФО-<br>
+                        ГЕОДЕЗИЧЕСКОЙ СЛУЖБЫ
+                    </h1>
+                </div>
+                <div class="white-card">
+                    <p>Спасибо тебе и таким как ты, что знаете, где мы находимся 📍</p>
+                    <p>Без вас мы бы заблудились... буквально.</p>
+                    <p>Жми куда угодно для праздничного салюта 🎆</p>
+                </div>
+                <div class="click-counter" id="clickCounter"></div>
+                <div class="bottom-decoration">
+                    <div class="bottom-emojis">🏠🌳🏢🐸🏗️🌲🏰🐸🌴🏡</div>
+                    <p class="bottom-credit">made with 💚 and 🐸</p>
+                </div>
+            </div>
+            <div class="flying-emojis-layer" id="emojiLayer"></div>
+            <div id="quoteContainer"></div>
+        `;
+
+        const emojiLayer = document.getElementById('emojiLayer');
+        const clickCounter = document.getElementById('clickCounter');
+        const quoteContainer = document.getElementById('quoteContainer');
+
+        function spawnEmojis(cx, cy, count) {
+            const available = MAX_EMOJIS - flyingEmojis.length;
+            const actualCount = Math.min(count, Math.max(0, available));
+            if (actualCount <= 0) return;
+
+            for (let i = 0; i < actualCount; i++) {
+                const angle = (Math.PI * 2 * i) / actualCount + (Math.random() - 0.5) * 0.5;
+                const speed = 3 + Math.random() * 8;
+                const emoji = {
+                    id: nextEmojiId++,
+                    emoji: EMOJI_LIST[Math.floor(Math.random() * EMOJI_LIST.length)],
+                    x: cx,
+                    y: cy,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed - 3 - Math.random() * 4,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: (Math.random() - 0.5) * 15,
+                    scale: 0.5 + Math.random() * 1.2,
+                    opacity: 1,
+                    life: 80 + Math.random() * 50,
+                    el: null,
+                };
+                const el = document.createElement('div');
+                el.className = 'flying-emoji';
+                el.textContent = emoji.emoji;
+                emojiLayer.appendChild(el);
+                emoji.el = el;
+                flyingEmojis.push(emoji);
+            }
+        }
+
+        function tick() {
+            for (let i = flyingEmojis.length - 1; i >= 0; i--) {
+                const e = flyingEmojis[i];
+                e.x += e.vx;
+                e.y += e.vy;
+                e.vy += 0.15;
+                e.vx *= 0.99;
+                e.rotation += e.rotationSpeed;
+                e.life -= 1;
+                e.opacity = Math.min(1, e.life / 30);
+
+                if (e.life <= 0) {
+                    e.el.remove();
+                    flyingEmojis.splice(i, 1);
+                } else {
+                    e.el.style.left = e.x + 'px';
+                    e.el.style.top = e.y + 'px';
+                    e.el.style.transform = `translate(-50%,-50%) rotate(${e.rotation}deg) scale(${e.scale})`;
+                    e.el.style.opacity = e.opacity;
+                }
+            }
+            animFrameId = requestAnimationFrame(tick);
+        }
+
+        animFrameId = requestAnimationFrame(tick);
+
+        function updateCounter() {
+            if (clickCount === 0) {
+                clickCounter.textContent = '';
+                return;
+            }
+            if (clickCount < 5) {
+                clickCounter.textContent = `Нажатий: ${clickCount}. Давай ещё`;
+            } else if (clickCount < 20) {
+                clickCounter.textContent = `Уже ${clickCount}. Ты в ударе 🐸`;
+            } else if (clickCount < 50) {
+                clickCounter.textContent = `${clickCount} кликов. Ты маньяк-геодезист`;
+            } else if (clickCount < 100) {
+                clickCounter.textContent = `${clickCount}. Все лягушки мира гордятся тобой`;
+            } else {
+                clickCounter.textContent = `${clickCount}. Ачивки не будет,\nно ты всё равно умничка ^^`;
+            }
+        }
+
+        function pickQuoteIndex() {
+            if (FROG_QUOTES.length <= 1) return 0;
+            let idx;
+            do {
+                idx = Math.floor(Math.random() * FROG_QUOTES.length);
+            } while (idx === lastQuoteIndex);
+            lastQuoteIndex = idx;
+            return idx;
+        }
+
+        function showFrogQuote() {
+            if (quoteVisible) return;
+            if (Math.random() > 0.5) return;
+
+            quoteVisible = true;
+            const idx = pickQuoteIndex();
+            const quote = FROG_QUOTES[idx];
+
+            quoteContainer.innerHTML = `<div class="frog-quote">${quote}</div>`;
+            const quoteEl = quoteContainer.querySelector('.frog-quote');
+
+            quoteTimeout = setTimeout(() => {
+                quoteEl.classList.add('fade-out');
+                quoteFadeTimeout = setTimeout(() => {
+                    quoteContainer.innerHTML = '';
+                    quoteVisible = false;
+                }, QUOTE_FADEOUT_MS);
+            }, QUOTE_DISPLAY_MS);
+        }
+
+        document.body.addEventListener('click', (e) => {
+            const count = EMOJIS_PER_CLICK_MIN + Math.floor(Math.random() * (EMOJIS_PER_CLICK_MAX - EMOJIS_PER_CLICK_MIN));
+            spawnEmojis(e.clientX, e.clientY, count);
+            clickCount++;
+            updateCounter();
+            showFrogQuote();
+        });
+    </script>
+</body>
+</html>
